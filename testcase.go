@@ -54,9 +54,10 @@ func encoding(code string)string{
 		stringIsEncode+=symbol
 		encoded = addLastString(encoded,value)
 		if(len(stringIsEncode)>1){
-			encoded = backTestAndChangeValue(stringIsEncode,encoded)
+			// encoded = backTestAndChangeValue(stringIsEncode,encoded)
 		}
 	}
+	// encoded = backTestAndChangeValue(stringIsEncode,encoded)
 	return encoded
 }
 
