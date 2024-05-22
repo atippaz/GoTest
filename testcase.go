@@ -27,8 +27,8 @@ func main(){
 		},
 	}
 	for index, item := range testCase {
-		result := encode(item.input)
 		fmt.Println(fmt.Sprintf("------------------- %s ----------------", strconv.Itoa(index)))
+		result := encoding(item.input)
 		fmt.Println(fmt.Sprintf("code : %s", item.input))
 		fmt.Println(fmt.Sprintf("answer : %s", item.expected))
 		fmt.Println(fmt.Sprintf("encode result : %s",result ))
@@ -36,42 +36,40 @@ func main(){
 	}
 }
 
-func encode(code string)string{
-	currentNumber := 0
-    if code[0] == 'R' {
-        currentNumber = 0
-    } else if code[0] == '=' {
-		if(len(code)<=1){
-			currentNumber = 0
-		} else if code[1] == 'L' {
-			currentNumber  = 2
-		} else if code[1] == 'R' || code[1] == '=' {
-			currentNumber = 0
+
+func encoding(code string)string{
+	encoded:=""
+	// สร้าง 1010101
+	for i:=0;i<len(code) ;i++{
+		symbol:=code[i]
+		value:=""
+		if symbol == 'L' {
+			value = "10"
+		} else if symbol == 'R' {
+			value = "01"
+		} else if symbol == '=' {
+			value = "00"
 		}
-    } else if code[0] == 'L'{
-		currentNumber  = 2
+		encoded = addLastString(encoded,value)
 	}
-	result:=""
-	firstIter := true
-	for i:=0;i<len(code) || firstIter;i++{
-		if firstIter {
-			currentNumber = createAlphabet('=',currentNumber)
-			result+=strconv.Itoa(currentNumber)
-			firstIter = false
-			i-=0
-		}
-		currentNumber = createAlphabet(code[i],currentNumber)
-		result+=strconv.Itoa(currentNumber)
-	}
-	return result
+	return encoded
 }
-func createAlphabet(symbol byte,currentValue int)int{
-	if symbol == 'L' {
-        return currentValue -1
-    } else if symbol == 'R' {
-        return currentValue + 1
-    } else if symbol == '=' {
-        return currentValue
+
+func addLastString(started string,adding string)string{
+	if len(started)==0 {
+		return adding
+	}
+	endStartText, err := strconv.Atoi(started[len(started)-1:])
+    if err != nil {
+        panic(err)
     }
-    return 0
+    startWithoutEnd := started[:len(started)-1]
+    startAdd, err := strconv.Atoi(adding[0:1])
+    if err != nil {
+        panic(err) 
+    }
+    addString := adding[1:]    
+    combinedNumber := endStartText + startAdd
+    result := startWithoutEnd + strconv.Itoa(combinedNumber) + addString
+	return result
 }
