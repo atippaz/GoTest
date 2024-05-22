@@ -45,11 +45,6 @@ func encoding(code string)string{
 	hasChange := false
 	for i:=0;i<len(code) ;i++{
 		symbol :=code[i:i+1]
-		// if(hasChange){
-		// 	coded = backTestAndChangeValue(stringIsEncode,coded)
-		// 	hasChange = false
-		// 	continue
-		// }
 		stringIsEncode+=symbol
 		left := 0
 		right:=0
@@ -112,7 +107,11 @@ func backTestAndChangeValue(code string,encode string)(string, bool){
 			hasChange = true
 			isChange = true
 		} else if symbol == "=" &&leftValue!=rightValue {
-			rightValue = leftValue
+			if(leftValue > rightValue){
+				rightValue = leftValue
+			}else {
+				leftValue = rightValue
+			}
 			hasChange = true
 			isChange = true
 		}
