@@ -1,4 +1,5 @@
 package main
+
 import (
 	"fmt"
 	"strconv"
@@ -27,10 +28,10 @@ func main(){
 		},
 	}
 	for index, item := range testCase {
-		fmt.Println(fmt.Sprintf("------------------- %s ----------------", strconv.Itoa(index)))
-		result := encoding(item.input)
+		fmt.Println(fmt.Sprintf("------------------- %s ----------------", strconv.Itoa(index+1)))
 		fmt.Println(fmt.Sprintf("code : %s", item.input))
 		fmt.Println(fmt.Sprintf("answer : %s", item.expected))
+		result := encoding(item.input)
 		fmt.Println(fmt.Sprintf("encode result : %s",result ))
 		fmt.Println(fmt.Sprintf("is correct : %s",strconv.FormatBool(result == item.expected) ))
 	}
@@ -38,49 +39,59 @@ func main(){
 
 
 func encoding(code string)string{
-	encoded:=""
 	stringIsEncode := ""
 	// สร้าง 1010101
+	coded :=""
+	hasChange := false
 	for i:=0;i<len(code) ;i++{
-		symbol:=code[i:i+1]
-		value:=""
-		if symbol == "L" {
-			value = "10"
-		} else if symbol == "R" {
-			value = "01"
-		} else if symbol == "=" {
-			value = "00"
-		}
+		symbol :=code[i:i+1]
+		// if(hasChange){
+		// 	coded = backTestAndChangeValue(stringIsEncode,coded)
+		// 	hasChange = false
+		// 	continue
+		// }
 		stringIsEncode+=symbol
-		encoded = addLastString(encoded,value)
-		if(len(stringIsEncode)>1){
-			// encoded = backTestAndChangeValue(stringIsEncode,encoded)
+		left := 0
+		right:=0
+		temp:=""
+		if symbol == "L" {
+			left = 1
+		} else if symbol == "R" {
+			right = 1
+		} 
+		temp = strconv.Itoa(left)+strconv.Itoa(right)
+		if(len(coded)<2){
+			coded += temp
+			continue
 		}
+		leftValue, err := strconv.Atoi(coded[len(coded)-1:])
+        if err != nil {
+			panic(err)
+        }
+        rightValue, err := strconv.Atoi(temp[0 :1])
+        if err != nil {
+			panic(err)
+        }
+		startWithoutEnd := coded[:len(coded)-1]
+		addString := temp[1:] 
+		combinedNumber:=0   
+		if(!hasChange){
+			combinedNumber = leftValue + rightValue
+			hasChange = false
+		}
+		coded = startWithoutEnd + strconv.Itoa(combinedNumber) + addString
+		coded,hasChange = backTestAndChangeValue(stringIsEncode,coded)
 	}
-	// encoded = backTestAndChangeValue(stringIsEncode,encoded)
-	return encoded
+	coded,hasChange = backTestAndChangeValue(stringIsEncode,coded)
+	return coded
 }
 
-func addLastString(started string,adding string)string{
-	if len(started)==0 {
-		return adding
-	}
-	endStartText, err := strconv.Atoi(started[len(started)-1:])
-    if err != nil {
-        panic(err)
-    }
-    startWithoutEnd := started[:len(started)-1]
-    startAdd, err := strconv.Atoi(adding[0:1])
-    if err != nil {
-        panic(err) 
-    }
-    addString := adding[1:]    
-    combinedNumber := endStartText + startAdd
-    result := startWithoutEnd + strconv.Itoa(combinedNumber) + addString
-	return result
-}
-func backTestAndChangeValue(code string,encode string)string{
+// func addLastString(coded string,symbol string)string{
+	
+// }
+func backTestAndChangeValue(code string,encode string)(string, bool){
 	_encode:=encode
+	isChange:=false
 	for i:=len(code);i>0  ;i--{
 		hasChange := false
 		leftValue, err := strconv.Atoi(_encode[i-1: i])
@@ -95,17 +106,20 @@ func backTestAndChangeValue(code string,encode string)string{
 		if symbol == "L" && leftValue <= rightValue {
 			leftValue+=1
 			hasChange = true
+			isChange = true
 		} else if symbol == "R" &&leftValue>=rightValue {
 			rightValue+=1
 			hasChange = true
+			isChange = true
 		} else if symbol == "=" &&leftValue!=rightValue {
 			rightValue = leftValue
 			hasChange = true
+			isChange = true
 		}
 		_encode = _encode[0:i-1] + strconv.Itoa(leftValue)+strconv.Itoa(rightValue) +_encode[i+1:]
 		if(hasChange){
-			i++
+			i+=1
 		}
 	}
-	return _encode
+	return _encode,isChange
 }
