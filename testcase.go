@@ -39,20 +39,25 @@ func main(){
 
 func encoding(code string)string{
 	encoded:=""
+	stringIsEncode := ""
 	// สร้าง 1010101
 	for i:=0;i<len(code) ;i++{
-		symbol:=code[i]
+		symbol:=code[i:i+1]
 		value:=""
-		if symbol == 'L' {
+		if symbol == "L" {
 			value = "10"
-		} else if symbol == 'R' {
+		} else if symbol == "R" {
 			value = "01"
-		} else if symbol == '=' {
+		} else if symbol == "=" {
 			value = "00"
 		}
+		if(len(stringIsEncode)>1){
+			backTestAndChangeValue(stringIsEncode,encoded)
+		}
+		stringIsEncode+=symbol
 		encoded = addLastString(encoded,value)
 	}
-	return encoded
+	return backTestAndChangeValue(code,encoded)
 }
 
 func addLastString(started string,adding string)string{
@@ -72,4 +77,9 @@ func addLastString(started string,adding string)string{
     combinedNumber := endStartText + startAdd
     result := startWithoutEnd + strconv.Itoa(combinedNumber) + addString
 	return result
+}
+func backTestAndChangeValue(code string,encode string)string{
+	fmt.Println(code)
+	fmt.Println(encode)
+	return encode
 }
