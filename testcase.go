@@ -51,13 +51,13 @@ func encoding(code string)string{
 		} else if symbol == "=" {
 			value = "00"
 		}
-		if(len(stringIsEncode)>1){
-			backTestAndChangeValue(stringIsEncode,encoded)
-		}
 		stringIsEncode+=symbol
 		encoded = addLastString(encoded,value)
+		if(len(stringIsEncode)>1){
+			encoded = backTestAndChangeValue(stringIsEncode,encoded)
+		}
 	}
-	return backTestAndChangeValue(code,encoded)
+	return encoded
 }
 
 func addLastString(started string,adding string)string{
@@ -79,7 +79,32 @@ func addLastString(started string,adding string)string{
 	return result
 }
 func backTestAndChangeValue(code string,encode string)string{
-	fmt.Println(code)
-	fmt.Println(encode)
-	return encode
+	_encode:=encode
+	for i:=len(code);i>0  ;i--{
+		hasChange := false
+		leftValue, err := strconv.Atoi(_encode[i-1: i])
+        if err != nil {
+			panic(err)
+        }
+        rightValue, err := strconv.Atoi(_encode[i : i+1])
+        if err != nil {
+			panic(err)
+        }
+		symbol:=code[i-1:i]
+		if symbol == "L" && leftValue <= rightValue {
+			leftValue+=1
+			hasChange = true
+		} else if symbol == "R" &&leftValue>=rightValue {
+			rightValue+=1
+			hasChange = true
+		} else if symbol == "=" &&leftValue!=rightValue {
+			rightValue = leftValue
+			hasChange = true
+		}
+		_encode = _encode[0:i-1] + strconv.Itoa(leftValue)+strconv.Itoa(rightValue) +_encode[i+1:]
+		if(hasChange){
+			i++
+		}
+	}
+	return _encode
 }
