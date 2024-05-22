@@ -35,12 +35,12 @@ func main(){
 		fmt.Println(fmt.Sprintf("encode result : %s",result ))
 		fmt.Println(fmt.Sprintf("is correct : %s",strconv.FormatBool(result == item.expected) ))
 	}
+	fmt.Println("--------------------------------------")
 }
 
 
 func encoding(code string)string{
 	stringIsEncode := ""
-	// สร้าง 1010101
 	coded :=""
 	hasChange := false
 	for i:=0;i<len(code) ;i++{
@@ -81,9 +81,6 @@ func encoding(code string)string{
 	return coded
 }
 
-// func addLastString(coded string,symbol string)string{
-	
-// }
 func backTestAndChangeValue(code string,encode string)(string, bool){
 	_encode:=encode
 	isChange:=false
