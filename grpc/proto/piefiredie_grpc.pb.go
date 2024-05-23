@@ -18,86 +18,86 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// GreeterClient is the client API for Greeter service.
+// BeefClient is the client API for Beef service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type GreeterClient interface {
+type BeefClient interface {
 	BeefSummary(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 }
 
-type greeterClient struct {
+type beefClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewGreeterClient(cc grpc.ClientConnInterface) GreeterClient {
-	return &greeterClient{cc}
+func NewBeefClient(cc grpc.ClientConnInterface) BeefClient {
+	return &beefClient{cc}
 }
 
-func (c *greeterClient) BeefSummary(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (c *beefClient) BeefSummary(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/helloworld.Greeter/BeefSummary", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/backendChallenge.Beef/BeefSummary", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// GreeterServer is the server API for Greeter service.
-// All implementations must embed UnimplementedGreeterServer
+// BeefServer is the server API for Beef service.
+// All implementations must embed UnimplementedBeefServer
 // for forward compatibility
-type GreeterServer interface {
+type BeefServer interface {
 	BeefSummary(context.Context, *Request) (*Response, error)
-	mustEmbedUnimplementedGreeterServer()
+	mustEmbedUnimplementedBeefServer()
 }
 
-// UnimplementedGreeterServer must be embedded to have forward compatible implementations.
-type UnimplementedGreeterServer struct {
+// UnimplementedBeefServer must be embedded to have forward compatible implementations.
+type UnimplementedBeefServer struct {
 }
 
-func (UnimplementedGreeterServer) BeefSummary(context.Context, *Request) (*Response, error) {
+func (UnimplementedBeefServer) BeefSummary(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BeefSummary not implemented")
 }
-func (UnimplementedGreeterServer) mustEmbedUnimplementedGreeterServer() {}
+func (UnimplementedBeefServer) mustEmbedUnimplementedBeefServer() {}
 
-// UnsafeGreeterServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to GreeterServer will
+// UnsafeBeefServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to BeefServer will
 // result in compilation errors.
-type UnsafeGreeterServer interface {
-	mustEmbedUnimplementedGreeterServer()
+type UnsafeBeefServer interface {
+	mustEmbedUnimplementedBeefServer()
 }
 
-func RegisterGreeterServer(s grpc.ServiceRegistrar, srv GreeterServer) {
-	s.RegisterService(&Greeter_ServiceDesc, srv)
+func RegisterBeefServer(s grpc.ServiceRegistrar, srv BeefServer) {
+	s.RegisterService(&Beef_ServiceDesc, srv)
 }
 
-func _Greeter_BeefSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Beef_BeefSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GreeterServer).BeefSummary(ctx, in)
+		return srv.(BeefServer).BeefSummary(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/helloworld.Greeter/BeefSummary",
+		FullMethod: "/backendChallenge.Beef/BeefSummary",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterServer).BeefSummary(ctx, req.(*Request))
+		return srv.(BeefServer).BeefSummary(ctx, req.(*Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Greeter_ServiceDesc is the grpc.ServiceDesc for Greeter service.
+// Beef_ServiceDesc is the grpc.ServiceDesc for Beef service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Greeter_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "helloworld.Greeter",
-	HandlerType: (*GreeterServer)(nil),
+var Beef_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "backendChallenge.Beef",
+	HandlerType: (*BeefServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "BeefSummary",
-			Handler:    _Greeter_BeefSummary_Handler,
+			Handler:    _Beef_BeefSummary_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

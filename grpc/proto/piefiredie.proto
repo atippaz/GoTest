@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package helloworld;
+package backendChallenge;
 option go_package = "grpc/proto";
 import "google/api/annotations.proto";
 
-service Greeter {
+service Beef {
   rpc BeefSummary (Request) returns (Response) {
     option (google.api.http) = {
       post: "/beef/summary"
