@@ -1,4 +1,4 @@
-package main
+package Client
 
 import (
 	"context"
@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"reflect"
 
-	pb "grpc/proto"
 	"log"
 	"strconv"
+	pb "test/grpc/proto"
 	"time"
 
 	"google.golang.org/grpc"
@@ -22,7 +22,7 @@ type TestCase struct {
 	resultExpected BeefRespone
 }
 
-func main() {
+func StartSendRequest() {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {

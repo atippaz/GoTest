@@ -1,4 +1,4 @@
-module grpc
+module test
 
 go 1.22.2
 

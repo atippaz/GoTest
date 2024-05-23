@@ -1,4 +1,4 @@
-package main
+package mains
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ type TestCase struct {
     input string
 	expected string
 }
-func main(){
+func Test(){
 	testCase := [...]TestCase{
 		{
 			input:"LLRR=",
