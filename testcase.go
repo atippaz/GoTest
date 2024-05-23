@@ -38,7 +38,6 @@ func main(){
 	fmt.Println("--------------------------------------")
 }
 
-
 func encoding(code string)string{
 	stringIsEncode := ""
 	coded :=""
@@ -48,12 +47,12 @@ func encoding(code string)string{
 		stringIsEncode+=symbol
 		left := 0
 		right:=0
-		temp:=""
 		if symbol == "L" {
 			left = 1
 		} else if symbol == "R" {
 			right = 1
 		} 
+		temp:=""
 		temp = strconv.Itoa(left)+strconv.Itoa(right)
 		if(len(coded)<2){
 			coded += temp
